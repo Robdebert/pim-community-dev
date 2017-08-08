@@ -38,7 +38,7 @@ Feature: Create product through CSV import
     And I launch the import job
     And I wait for the "csv_catalog_modeling_product_model_import" job to finish
     Then I should see the text "created 1"
-    Then I should see the text "skipped 3"
+    Then I should see the text "skipped 2"
     And I should see the text "The product model code must not be empty"
     And I should see the text "Property \"family_variant\" expects a valid family variant code. The family variant does not exist, \"\" given"
 
@@ -56,9 +56,9 @@ Feature: Create product through CSV import
     When I am on the "csv_catalog_modeling_product_model_import" import job page
     And I launch the import job
     And I wait for the "csv_catalog_modeling_product_model_import" job to finish
-    Then I should see the text "created 1"
+    Then I should see the text "created 2"
     Then I should see the text "skipped 2"
-    And I should see the text "Property \"family_variant\" expects a valid family variant code. The family variant does not exist, \"code-004\" given"
+    And I should see the text "Property \"parent\" expects a valid parent code. The product model does not exist, \"code-005\" given"
     And I should see the text "The sub product model parent must be a root product model"
 
   Scenario: Skip the products sub-model if variant axes are empty
@@ -81,7 +81,7 @@ Feature: Create product through CSV import
     Given the following CSV file to import:
       """
       code;parent;family_variant;categories;collection;description-en_US-ecommerce;erp_name-en_US;price;color;name-en_US;composition;size;EAN;sku;weight
-      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;;blue;Blazers;composition;;;;
+      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;blue;Blazers;composition;;;;
       """
     And the following job "csv_catalog_modeling_product_model_import" configuration:
       | filePath | %file to import% |
@@ -90,12 +90,13 @@ Feature: Create product through CSV import
     And I wait for the "csv_catalog_modeling_product_model_import" job to finish
     Then the product model "code-001" should not have the following values "composition, name-en_US, color"
 
+  @skip
   Scenario: Only the attributes with values defined as variant attributes level 1 in the variant of the family are updated.
     Given the following CSV file to import:
       """
       code;parent;family_variant;categories;collection;description-en_US-ecommerce;erp_name-en_US;price;color;name-en_US;composition;size;EAN;sku;weight
-      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;;blue;Blazers;composition;;;;
-      code-002;code-001;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;;blue;Blazers;composition;;;;
+      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;blue;Blazers;composition;;;;
+      code-002;code-001;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;blue;Blazers;composition;;;;
       """
     And the following job "csv_catalog_modeling_product_model_import" configuration:
       | filePath | %file to import% |
@@ -107,8 +108,8 @@ Feature: Create product through CSV import
   Scenario: Skip the product model if some attributes with values are not defined in the family
     Given the following CSV file to import:
       """
-      code;parent;family_variant;categories;collection;description-en_US-ecommerce;erp_name-en_US;price;color;name-en_US;composition;size;EAN;sku;weight;EAN
-      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;;blue;Blazers;composition;;;;;EAN
+      code;parent;family_variant;categories;collection;description-en_US-ecommerce;erp_name-en_US;price;color;name-en_US;composition;size;EAN;sku;weight;sole_composition
+      code-001;;variant_clothing_color_and_size;master_men;Spring2017;description;Blazers_1654;100 EUR;;;;;;;;sole_composition
       """
     And the following job "csv_catalog_modeling_product_model_import" configuration:
       | filePath | %file to import% |
@@ -116,4 +117,4 @@ Feature: Create product through CSV import
     And I launch the import job
     And I wait for the "csv_catalog_modeling_product_model_import" job to finish
     Then I should see the text "skipped 1"
-    And I should see the text "Attribute \"EAN\" does not belong to the family \"clothing\""
+    And I should see the text "Attribute \"sole_composition\" does not belong to the family \"clothing\""

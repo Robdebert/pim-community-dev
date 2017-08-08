@@ -3,6 +3,7 @@ Pim\Component\Catalog\Model\ProductModel:
         - Pim\Component\Catalog\Validator\Constraints\OnlyExpectedAttributes: ~
         - Pim\Component\Catalog\Validator\Constraints\SiblingUniqueVariantAxes: ~
         - Pim\Component\Catalog\Validator\Constraints\NotEmptyVariantAxes: ~
+        - Pim\Component\Catalog\Validator\Constraints\HasARootProductModelAsParent: ~
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: ['code']
             message: 'product_model.code.unique.message'
