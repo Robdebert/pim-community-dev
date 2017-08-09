@@ -22,7 +22,6 @@ class ProductAndProductModelIndexingIntegration extends TestCase
         );
     }
 
-    /** @group todo */
     public function testRootProductModel()
     {
         $date = \DateTime::createFromFormat(

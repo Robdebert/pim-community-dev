@@ -9,7 +9,7 @@ use Pim\Component\Catalog\Model\ProductModelInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * Normalize product to the "indexing_product_and_product_model" format.
+ * Normalize a product model to the "indexing_product_and_product_model" format.
  *
  * @author    Julien Janvier <jjanvier@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)
@@ -53,16 +53,21 @@ class ProductModelNormalizer implements NormalizerInterface
         return $data instanceof ProductModelInterface && self::INDEXING_FORMAT_PRODUCT_AND_MODEL_INDEX === $format;
     }
 
-    private function getVariationLevelCode(EntityWithFamilyVariantInterface $product): string
+    /**
+     * Returns the product_type of the given product model.
+     *
+     * @param EntityWithFamilyVariantInterface $productModel
+     *
+     * @return string
+     */
+    private function getVariationLevelCode(ProductModelInterface $productModel): string
     {
-        $level = $product->getVariationLevel();
+        $level = $productModel->getVariationLevel();
         switch ($level) {
             case 0:
                 return 'PimCatalogRootProductModel';
             case 1:
                 return 'PimCatalogSubProductModel';
-            case 2:
-                return 'PimCatalogProduct';
             default:
                 throw new \LogicException(sprintf('Invalid variant level. %s given', $level));
         }

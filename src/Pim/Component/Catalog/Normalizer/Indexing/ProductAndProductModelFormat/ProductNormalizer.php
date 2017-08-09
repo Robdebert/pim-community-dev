@@ -37,7 +37,6 @@ class ProductNormalizer implements NormalizerInterface
     {
         $data = $this->propertiesNormalizer->normalize($product, $format, $context);
 
-
         $data[self::FIELD_PRODUCT_TYPE] = $this->getVariationLevelCode($product);
         $data[self::FIELD_ATTRIBUTES_IN_LEVEL] = array_keys($product->getRawValues());
 
@@ -53,22 +52,17 @@ class ProductNormalizer implements NormalizerInterface
             $data instanceof ProductInterface;
     }
 
+    /**
+     * @param ProductInterface $product
+     *
+     * @return string
+     */
     private function getVariationLevelCode(ProductInterface $product): string
     {
-        if (!$product instanceof EntityWithFamilyVariantInterface) {
-            return 'PimCatalogProduct';
+        if ($product instanceof VariantProductInterface) {
+            return 'PimCatalogVariantProduct';
         }
 
-        $level = $product->getVariationLevel();
-        switch ($level) {
-            case 0:
-                return 'PimCatalogRootProductModel';
-            case 1:
-                return 'PimCatalogSubProductModel';
-            case 2:
-                return 'PimCatalogVariantProduct';
-            default:
-                throw new \LogicException(sprintf('Invalid variant level. %s given', $level));
-        }
+        return 'PimCatalogProduct';
     }
 }

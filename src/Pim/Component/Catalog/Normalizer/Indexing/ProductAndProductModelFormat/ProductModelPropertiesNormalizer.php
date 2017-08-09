@@ -3,7 +3,6 @@
 namespace Pim\Component\Catalog\Normalizer\Indexing\ProductAndProductModelFormat;
 
 use Pim\Component\Catalog\Model\ProductModelInterface;
-use Pim\Component\Catalog\Normalizer\Indexing\ProductAndProductModelFormat\ProductModelNormalizer;
 use Pim\Component\Catalog\Normalizer\Standard\Product\PropertiesNormalizer as StandardPropertiesNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;

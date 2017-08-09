@@ -114,7 +114,7 @@ class ProductModelIndexer implements IndexerInterface, BulkIndexerInterface, Rem
     /**
      * {@inheritdoc}
      */
-    protected function validateObjectNormalization(array $normalization) : void
+    private function validateObjectNormalization(array $normalization) : void
     {
         if (!isset($normalization['id'])) {
             throw new \InvalidArgumentException(

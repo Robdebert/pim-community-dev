@@ -2,7 +2,6 @@
 
 namespace Pim\Component\Catalog\Normalizer\Indexing\ProductAndProductModelFormat;
 
-use Pim\Component\Catalog\Model\EntityWithFamilyVariantInterface;
 use Pim\Component\Catalog\Model\ProductInterface;
 use Pim\Component\Catalog\Model\VariantProductInterface;
 use Pim\Component\Catalog\Normalizer\Standard\Product\PropertiesNormalizer as StandardPropertiesNormalizer;
@@ -10,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 
 /**
- * Transform the properties of a products and variant products object (fields and product values)
+ * Transform the properties of products and variant product objects (fields and product values)
  * to the "indexing_product_and_product_model" format.
  *
  * @author    Samir Boulil <samir.boulil@akeneo.com>
@@ -19,10 +18,10 @@ use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
  */
 class ProductPropertiesNormalizer extends SerializerAwareNormalizer implements NormalizerInterface
 {
-    protected const FIELD_COMPLETENESS = 'completeness';
-    protected const FIELD_FAMILY_VARIANT = 'family_variant';
-    protected const FIELD_IN_GROUP = 'in_group';
-    protected const FIELD_ID = 'id';
+    private const FIELD_COMPLETENESS = 'completeness';
+    private const FIELD_FAMILY_VARIANT = 'family_variant';
+    private const FIELD_IN_GROUP = 'in_group';
+    private const FIELD_ID = 'id';
 
     /**
      * {@inheritdoc}
@@ -88,7 +87,7 @@ class ProductPropertiesNormalizer extends SerializerAwareNormalizer implements N
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof ProductInterface
+        return ($data instanceof ProductInterface || $data instanceof VariantProductInterface)
             && ProductModelNormalizer::INDEXING_FORMAT_PRODUCT_AND_MODEL_INDEX === $format;
     }
 }
